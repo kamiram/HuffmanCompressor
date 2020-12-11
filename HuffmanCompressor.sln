@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HuffmanCompressor", "HuffmanCompressor.csproj", "{11744C8A-E827-4B47-BE3D-14656DD023A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11744C8A-E827-4B47-BE3D-14656DD023A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11744C8A-E827-4B47-BE3D-14656DD023A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11744C8A-E827-4B47-BE3D-14656DD023A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11744C8A-E827-4B47-BE3D-14656DD023A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B7F4649C-4483-4696-BCC7-BBFA0FB287A3}
+	EndGlobalSection
+EndGlobal
