@@ -121,7 +121,7 @@
             this.TabPageUnpack.Location = new System.Drawing.Point(4, 28);
             this.TabPageUnpack.Name = "TabPageUnpack";
             this.TabPageUnpack.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPageUnpack.Size = new System.Drawing.Size(433, 100);
+            this.TabPageUnpack.Size = new System.Drawing.Size(435, 106);
             this.TabPageUnpack.TabIndex = 1;
             this.TabPageUnpack.Text = "Распаковать";
             this.TabPageUnpack.UseVisualStyleBackColor = true;
@@ -151,6 +151,7 @@
             this.ButtonOpenOutputFile.TabIndex = 3;
             this.ButtonOpenOutputFile.Text = "Обзор...";
             this.ButtonOpenOutputFile.UseVisualStyleBackColor = true;
+            this.ButtonOpenOutputFile.Click += new System.EventHandler(this.ButtonOpenOutputFile_Click);
             // 
             // TabPageHistory
             // 

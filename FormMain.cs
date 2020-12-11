@@ -29,7 +29,7 @@ namespace HuffmanCompressor
 
         private void PackFile(string inputFileName, string outputFileName)
         {
-            if (inputFileName.Trim().Length == 0)
+            if (inputFileName.Trim().Length == 0 || inputFileName.Trim().Length == 0)
             {
                 MessageBox.Show("Укажите имя файла", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -42,14 +42,17 @@ namespace HuffmanCompressor
             try
             {
                 var inputFileData = File.ReadAllBytes(inputFileName);
-              //  inputFileData = Encoding.Default.GetBytes("aaaaaaaaa bb");
+                Console.WriteLine($"size: {inputFileData.Length}");
                 byte[] compressedData = new byte[inputFileData.Length * (101 / 100) + 320];
                 int compressedDataSize = Huffman.Compress(inputFileData, compressedData, (uint)inputFileData.Length);
                 int eff = 100 * compressedDataSize / inputFileData.Length;
-                MessageBox.Show($"Файл '{inputFileName}' сжат {eff}%", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                File.WriteAllBytes(outputFileName, compressedData);
+                MessageBox.Show($"Файл '{inputFileName}' сжат {eff}%", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                using (var outputFile = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
+                {
+                    outputFile.Write(compressedData, 0, compressedDataSize);
+                }
             }
-            catch (IOException e)
+            catch (IOException ex)
             {
                 MessageBox.Show($"Файл {outputFileName} не может быть записан.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
@@ -64,25 +67,51 @@ namespace HuffmanCompressor
             FormPackTo formPackTo = new FormPackTo();
             if (formPackTo.ShowDialog(this) == DialogResult.OK)
             {
-                PackFile(TextBoxInputFileName.Text, $"");
+                PackFile(TextBoxInputFileName.Text, $"{formPackTo.SelectedFileName}");
             }
             formPackTo.Dispose();
         }
         private void ButtonUnpack_Click(object sender, EventArgs e)
         {
-            var fileName = TextBoxInputFileName.Text;
-            if (fileName.Trim().Length == 0)
+            var inputFileName = TextBoxOutputFileName.Text;
+            var outputFileName = $"{inputFileName}.restored";
+
+            if (inputFileName.Trim().Length == 0)
             {
                 MessageBox.Show("Укажите имя файла", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            if (!File.Exists(fileName))
+            if (!File.Exists(inputFileName))
             {
-                MessageBox.Show($"Файл '{fileName}' не существует", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show($"Файл '{inputFileName }' не существует", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            MessageBox.Show($"Файл '{fileName}' сжат", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); ;
+            try
+            {
+                var inputFileData = File.ReadAllBytes(inputFileName);
+                uint maxSize = 10_000_000;
+                byte[] decompressedData = new byte[maxSize];
+                uint decompressedDataSize = Huffman.Decompress(inputFileData, decompressedData, (uint)(inputFileData.Length * (98/100) - 320), maxSize);
+                using (var outputFile = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
+                {
+                    outputFile.Write(decompressedData, 0, (int)decompressedDataSize);
+                }
+                                
+                MessageBox.Show($"Файл распакован в {outputFileName} .", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show($"Файл {outputFileName} не может быть записан.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
 
+        }
+
+        private void ButtonOpenOutputFile_Click(object sender, EventArgs e)
+        {
+            if (OpenFileDialogOutput.ShowDialog() == DialogResult.OK)
+            {
+                TextBoxOutputFileName.Text = OpenFileDialogOutput.FileName;
+            }
         }
     }
 }

@@ -28,42 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxDirectory = new System.Windows.Forms.TextBox();
-            this.buttonFolderBrowser = new System.Windows.Forms.Button();
-            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.textBoxFileName = new System.Windows.Forms.TextBox();
+            this.TextBoxDirectory = new System.Windows.Forms.TextBox();
+            this.ButtonFolderBrowser = new System.Windows.Forms.Button();
+            this.FolderBrowserDialogDest = new System.Windows.Forms.FolderBrowserDialog();
+            this.TextBoxFileName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.buttonOk = new System.Windows.Forms.Button();
-            this.buttonCancel = new System.Windows.Forms.Button();
+            this.ButtonOk = new System.Windows.Forms.Button();
+            this.ButtonCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // textBoxDirectory
+            // TextBoxDirectory
             // 
-            this.textBoxDirectory.Location = new System.Drawing.Point(105, 13);
-            this.textBoxDirectory.Name = "textBoxDirectory";
-            this.textBoxDirectory.Size = new System.Drawing.Size(408, 22);
-            this.textBoxDirectory.TabIndex = 0;
+            this.TextBoxDirectory.Location = new System.Drawing.Point(105, 13);
+            this.TextBoxDirectory.Name = "TextBoxDirectory";
+            this.TextBoxDirectory.Size = new System.Drawing.Size(408, 22);
+            this.TextBoxDirectory.TabIndex = 0;
             // 
-            // buttonFolderBrowser
+            // ButtonFolderBrowser
             // 
-            this.buttonFolderBrowser.Location = new System.Drawing.Point(520, 11);
-            this.buttonFolderBrowser.Name = "buttonFolderBrowser";
-            this.buttonFolderBrowser.Size = new System.Drawing.Size(75, 23);
-            this.buttonFolderBrowser.TabIndex = 1;
-            this.buttonFolderBrowser.Text = "Обзор...";
-            this.buttonFolderBrowser.UseVisualStyleBackColor = true;
+            this.ButtonFolderBrowser.Location = new System.Drawing.Point(520, 11);
+            this.ButtonFolderBrowser.Name = "ButtonFolderBrowser";
+            this.ButtonFolderBrowser.Size = new System.Drawing.Size(75, 23);
+            this.ButtonFolderBrowser.TabIndex = 1;
+            this.ButtonFolderBrowser.Text = "Обзор...";
+            this.ButtonFolderBrowser.UseVisualStyleBackColor = true;
+            this.ButtonFolderBrowser.Click += new System.EventHandler(this.ButtonFolderBrowser_Click);
             // 
-            // folderBrowserDialog
+            // FolderBrowserDialogDest
             // 
-            this.folderBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
+            this.FolderBrowserDialogDest.Description = "Выберите путь";
+            this.FolderBrowserDialogDest.RootFolder = System.Environment.SpecialFolder.MyDocuments;
             // 
-            // textBoxFileName
+            // TextBoxFileName
             // 
-            this.textBoxFileName.Location = new System.Drawing.Point(105, 41);
-            this.textBoxFileName.Name = "textBoxFileName";
-            this.textBoxFileName.Size = new System.Drawing.Size(408, 22);
-            this.textBoxFileName.TabIndex = 2;
+            this.TextBoxFileName.Location = new System.Drawing.Point(105, 41);
+            this.TextBoxFileName.Name = "TextBoxFileName";
+            this.TextBoxFileName.Size = new System.Drawing.Size(408, 22);
+            this.TextBoxFileName.TabIndex = 2;
             // 
             // label1
             // 
@@ -83,38 +85,38 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Имя Файла";
             // 
-            // buttonOk
+            // ButtonOk
             // 
-            this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOk.Location = new System.Drawing.Point(105, 84);
-            this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(75, 23);
-            this.buttonOk.TabIndex = 5;
-            this.buttonOk.Text = "Ok";
-            this.buttonOk.UseVisualStyleBackColor = true;
+            this.ButtonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.ButtonOk.Location = new System.Drawing.Point(105, 84);
+            this.ButtonOk.Name = "ButtonOk";
+            this.ButtonOk.Size = new System.Drawing.Size(75, 23);
+            this.ButtonOk.TabIndex = 5;
+            this.ButtonOk.Text = "Ok";
+            this.ButtonOk.UseVisualStyleBackColor = true;
             // 
-            // buttonCancel
+            // ButtonCancel
             // 
-            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(438, 84);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 6;
-            this.buttonCancel.Text = "Отмена";
-            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.ButtonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.ButtonCancel.Location = new System.Drawing.Point(438, 84);
+            this.ButtonCancel.Name = "ButtonCancel";
+            this.ButtonCancel.Size = new System.Drawing.Size(75, 23);
+            this.ButtonCancel.TabIndex = 6;
+            this.ButtonCancel.Text = "Отмена";
+            this.ButtonCancel.UseVisualStyleBackColor = true;
             // 
             // FormPackTo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(598, 119);
-            this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.buttonOk);
+            this.Controls.Add(this.ButtonCancel);
+            this.Controls.Add(this.ButtonOk);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBoxFileName);
-            this.Controls.Add(this.buttonFolderBrowser);
-            this.Controls.Add(this.textBoxDirectory);
+            this.Controls.Add(this.TextBoxFileName);
+            this.Controls.Add(this.ButtonFolderBrowser);
+            this.Controls.Add(this.TextBoxDirectory);
             this.Name = "FormPackTo";
             this.Text = "Сохранить результат";
             this.ResumeLayout(false);
@@ -124,13 +126,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBoxDirectory;
-        private System.Windows.Forms.Button buttonFolderBrowser;
-        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
-        private System.Windows.Forms.TextBox textBoxFileName;
+        private System.Windows.Forms.TextBox TextBoxDirectory;
+        private System.Windows.Forms.Button ButtonFolderBrowser;
+        private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialogDest;
+        private System.Windows.Forms.TextBox TextBoxFileName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button buttonOk;
-        private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button ButtonOk;
+        private System.Windows.Forms.Button ButtonCancel;
     }
 }
