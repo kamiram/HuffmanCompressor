@@ -9,15 +9,18 @@ namespace HuffmanCompressor
 {
     class Huffman
     {
+		// принципиальный максимум узлов.
 		private const int MAX_TREE_NODES = 511;
-
+		
+		// адаптер для записи побитово
 		public class BitStream
 		{
 			public byte[] BytePointer;
 			public uint BitPosition;
 			public uint Index;
 		}
-
+		
+		// Структура символа - содержит его частоту, битовую запись в архиве длину.
 		public struct Symbol
 		{
 			public int Sym;
@@ -26,6 +29,7 @@ namespace HuffmanCompressor
 			public uint Bits;
 		}
 
+		// Структура для дерева словаря
 		public class Node
 		{
 			public Node ChildA;
@@ -62,6 +66,7 @@ namespace HuffmanCompressor
 			stream.BitPosition = bit;
 		}
 
+		// строим масив всех байт и считаем их частоту
 		private static void histogram(byte[] input, Symbol[] sym, uint size)
 		{
 			int i;
@@ -81,6 +86,7 @@ namespace HuffmanCompressor
 			}
 		}
 
+		// создаем дерево. работает рекурсивно
 		private static void storeTree(ref Node node, Symbol[] sym, ref BitStream stream, uint code, uint bits)
 		{
 			uint symbolIndex;
@@ -104,11 +110,12 @@ namespace HuffmanCompressor
 			{
 				writeBits(ref stream, 0, 1);
 			}
-
+			// вот тут рекурсивно начинаем строить левое и правое дерево
 			storeTree(ref node.ChildA, sym, ref stream, (code << 1) + 0, bits + 1);
 			storeTree(ref node.ChildB, sym, ref stream, (code << 1) + 1, bits + 1);
 		}
 
+		// начало строительства дерева
 		private static void makeTree(Symbol[] sym, ref BitStream stream)
 		{
 			Node[] nodes = new Node[MAX_TREE_NODES];
@@ -120,7 +127,8 @@ namespace HuffmanCompressor
 
 			Node node1, node2, root;
 			uint i, numSymbols = 0, nodesLeft, nextIndex;
-
+			
+			// создаем все узлы. пока неструктурированные.
 			for (i = 0; i < 256; ++i)
 			{
 				if (sym[i].Count > 0)
@@ -136,7 +144,7 @@ namespace HuffmanCompressor
 			root = null;
 			nodesLeft = numSymbols;
 			nextIndex = numSymbols;
-
+			// начинаем структурировать
 			while (nodesLeft > 1)
 			{
 				node1 = null;
@@ -168,7 +176,7 @@ namespace HuffmanCompressor
 				++nextIndex;
 				--nodesLeft;
 			}
-
+			// строим полноценное бинарное дерево
 			if (root != null)
 			{
 				storeTree(ref root, sym, ref stream, 0, 0);
@@ -180,6 +188,7 @@ namespace HuffmanCompressor
 			}
 		}
 
+		// Архивация
 		public static int Compress(byte[] input, byte[] output, uint inputSize)
 		{
 			Symbol[] sym = new Symbol[256];
@@ -194,6 +203,7 @@ namespace HuffmanCompressor
 			histogram(input, sym, inputSize);
 			makeTree(sym, ref stream);
 
+			// сортировка символов по частоте
 			do
 			{
 				swaps = 0;
@@ -210,6 +220,9 @@ namespace HuffmanCompressor
 				}
 			} while (Convert.ToBoolean(swaps));
 
+			// пишем данные в виде последовательности бит
+			// это я уже описал.
+			// сама идея алгоритма в том что чатые символы записываются короткой последовательностью а редкие длинной
 			for (i = 0; i < inputSize; ++i)
 			{
 				symbol = input[i];
@@ -217,7 +230,7 @@ namespace HuffmanCompressor
 			}
 
 			totalBytes = stream.Index;
-
+			// учитываем последний неполный байт
 			if (stream.BitPosition > 0)
 			{
 				++totalBytes;
@@ -254,6 +267,7 @@ namespace HuffmanCompressor
 			return x;
 		}
 
+		// Востанавливаем деревоиз сохраненной таблицы символов
 		private static Node recoverTree(Node[] nodes, ref BitStream stream, ref uint nodenum)
 		{
 			Node thisNode;
@@ -276,6 +290,7 @@ namespace HuffmanCompressor
 			return thisNode;
 		}
 
+		// Распаковка
 		public static uint Decompress(byte[] input, byte[] output, uint inputSize, uint outputSize)
 		{
 			Node[] nodes = new Node[MAX_TREE_NODES];
@@ -298,6 +313,8 @@ namespace HuffmanCompressor
 			root = recoverTree(nodes, ref stream, ref nodeCount);
 			buffer = output;
 
+			// вот тут иедм по дереву пока не найдем символ.
+			// если нашли начинаем искать следующий
 			for (i = 0; i < outputSize; ++i)
 			{
 				node = root;
@@ -313,6 +330,8 @@ namespace HuffmanCompressor
 				}
                 catch(IndexOutOfRangeException ex)
                 {
+					// это на случай если чтото пошло не так.
+					// в норме срабоать не может
 					break;
                 }
 				buffer[i] = (byte)node.Symbol;

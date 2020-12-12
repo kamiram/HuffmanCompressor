@@ -90,20 +90,17 @@ namespace HuffmanCompressor
             }
             try
             {
-                byte[] inputFileData;
+                byte[] inputFileData = new byte[new System.IO.FileInfo(inputFileName).Length - 4];
                 int originalSize;
                 using (FileStream inputFile = File.OpenRead(inputFileName))
                 {
                     byte[] sizeBuff = new byte[4];
                     inputFile.Read(sizeBuff, 0, 4);
                     originalSize = BitConverter.ToInt32(sizeBuff, 0);
-                    long length = new System.IO.FileInfo(inputFileName).Length;
-                    inputFileData = new byte[length];
-                    inputFile.Read(inputFileData, 0, (int)length - 4);
+                    inputFile.Read(inputFileData, 0, inputFileData.Length);
                 }
 
-                uint maxSize = 10_000_000;
-                byte[] decompressedData = new byte[maxSize];
+                byte[] decompressedData = new byte[originalSize];
                 uint decompressedDataSize = Huffman.Decompress(inputFileData, decompressedData, (uint)(inputFileData.Length - 4), (uint)originalSize);
                 using (var outputFile = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
                 {
