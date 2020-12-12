@@ -26,6 +26,15 @@ namespace HuffmanCompressor
             }
         }
 
-        public string SelectedFileName => Path.Combine(TextBoxDirectory.Text, TextBoxFileName.Text);
+        public string SelectedFileName 
+        {
+            get =>  Path.Combine(TextBoxDirectory.Text, TextBoxFileName.Text);  
+            set
+            {
+                TextBoxFileName.Text = Path.GetFileName(value);
+                TextBoxDirectory.Text = Path.GetDirectoryName(value);
+                FolderBrowserDialogDest.SelectedPath = TextBoxDirectory.Text;
+            }
+        }
     }
 }

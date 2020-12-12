@@ -46,11 +46,12 @@ namespace HuffmanCompressor
                 byte[] compressedData = new byte[inputFileData.Length * (101 / 100) + 320];
                 int compressedDataSize = Huffman.Compress(inputFileData, compressedData, (uint)inputFileData.Length);
                 int eff = 100 * compressedDataSize / inputFileData.Length;
-                MessageBox.Show($"Файл '{inputFileName}' сжат {eff}%", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 using (var outputFile = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
                 {
                     outputFile.Write(compressedData, 0, compressedDataSize);
                 }
+                MessageBox.Show($"Файл '{inputFileName}' сжат {eff}%", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                TextBoxHistory.Text = $"Файл '{inputFileName}' сжат {eff}%\n{TextBoxHistory.Text}";
             }
             catch (IOException ex)
             {
@@ -65,6 +66,7 @@ namespace HuffmanCompressor
         private void ButtonPackTo_Click(object sender, EventArgs e)
         {
             FormPackTo formPackTo = new FormPackTo();
+            formPackTo.SelectedFileName = TextBoxInputFileName.Text;
             if (formPackTo.ShowDialog(this) == DialogResult.OK)
             {
                 PackFile(TextBoxInputFileName.Text, $"{formPackTo.SelectedFileName}");
@@ -96,8 +98,8 @@ namespace HuffmanCompressor
                 {
                     outputFile.Write(decompressedData, 0, (int)decompressedDataSize);
                 }
-                                
-                MessageBox.Show($"Файл распакован в {outputFileName} .", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Файл распакован в '{outputFileName}'.", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                TextBoxHistory.Text = $"Файл распакован в '{outputFileName}'.\n{TextBoxHistory.Text}";
             }
             catch (IOException ex)
             {
