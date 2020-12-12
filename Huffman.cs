@@ -26,10 +26,10 @@ namespace HuffmanCompressor
 			public uint Bits;
 		}
 
-		public class EncodeNode
+		public class Node
 		{
-			public EncodeNode ChildA;
-			public EncodeNode ChildB;
+			public Node ChildA;
+			public Node ChildB;
 			public int Count;
 			public int Symbol;
 		}
@@ -81,7 +81,7 @@ namespace HuffmanCompressor
 			}
 		}
 
-		private static void storeTree(ref EncodeNode node, Symbol[] sym, ref BitStream stream, uint code, uint bits)
+		private static void storeTree(ref Node node, Symbol[] sym, ref BitStream stream, uint code, uint bits)
 		{
 			uint symbolIndex;
 
@@ -111,14 +111,14 @@ namespace HuffmanCompressor
 
 		private static void makeTree(Symbol[] sym, ref BitStream stream)
 		{
-			EncodeNode[] nodes = new EncodeNode[MAX_TREE_NODES];
+			Node[] nodes = new Node[MAX_TREE_NODES];
 
 			for (int counter = 0; counter < nodes.Length; ++counter)
 			{
-				nodes[counter] = new EncodeNode();
+				nodes[counter] = new Node();
 			}
 
-			EncodeNode node1, node2, root;
+			Node node1, node2, root;
 			uint i, numSymbols = 0, nodesLeft, nextIndex;
 
 			for (i = 0; i < 256; ++i)
@@ -226,13 +226,6 @@ namespace HuffmanCompressor
 			return (int)totalBytes;
 		}
 
-		public class DecodeNode
-		{
-			public DecodeNode ChildA;
-			public DecodeNode ChildB;
-			public int Symbol;
-		}
-
 		private static uint readBit(ref BitStream stream)
 		{
 			byte[] buffer = stream.BytePointer;
@@ -261,9 +254,9 @@ namespace HuffmanCompressor
 			return x;
 		}
 
-		private static DecodeNode recoverTree(DecodeNode[] nodes, ref BitStream stream, ref uint nodenum)
+		private static Node recoverTree(Node[] nodes, ref BitStream stream, ref uint nodenum)
 		{
-			DecodeNode thisNode;
+			Node thisNode;
 
 			thisNode = nodes[nodenum];
 			nodenum = nodenum + 1;
@@ -285,14 +278,14 @@ namespace HuffmanCompressor
 
 		public static uint Decompress(byte[] input, byte[] output, uint inputSize, uint outputSize)
 		{
-			DecodeNode[] nodes = new DecodeNode[MAX_TREE_NODES];
+			Node[] nodes = new Node[MAX_TREE_NODES];
 
 			for (int counter = 0; counter < nodes.Length; ++counter)
 			{
-				nodes[counter] = new DecodeNode();
+				nodes[counter] = new Node();
 			}
 
-			DecodeNode root, node;
+			Node root, node;
 			BitStream stream = new BitStream();
 			uint i, nodeCount;
 			byte[] buffer;

@@ -42,12 +42,12 @@ namespace HuffmanCompressor
             try
             {
                 var inputFileData = File.ReadAllBytes(inputFileName);
-                Console.WriteLine($"size: {inputFileData.Length}");
                 byte[] compressedData = new byte[inputFileData.Length * (101 / 100) + 320];
                 int compressedDataSize = Huffman.Compress(inputFileData, compressedData, (uint)inputFileData.Length);
                 int eff = 100 * compressedDataSize / inputFileData.Length;
                 using (var outputFile = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
                 {
+                    outputFile.Write(BitConverter.GetBytes(inputFileData.Length), 0, 4);
                     outputFile.Write(compressedData, 0, compressedDataSize);
                 }
                 MessageBox.Show($"Файл '{inputFileName}' сжат {eff}%", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -90,10 +90,21 @@ namespace HuffmanCompressor
             }
             try
             {
-                var inputFileData = File.ReadAllBytes(inputFileName);
+                byte[] inputFileData;
+                int originalSize;
+                using (FileStream inputFile = File.OpenRead(inputFileName))
+                {
+                    byte[] sizeBuff = new byte[4];
+                    inputFile.Read(sizeBuff, 0, 4);
+                    originalSize = BitConverter.ToInt32(sizeBuff, 0);
+                    long length = new System.IO.FileInfo(inputFileName).Length;
+                    inputFileData = new byte[length];
+                    inputFile.Read(inputFileData, 0, (int)length - 4);
+                }
+
                 uint maxSize = 10_000_000;
                 byte[] decompressedData = new byte[maxSize];
-                uint decompressedDataSize = Huffman.Decompress(inputFileData, decompressedData, (uint)(inputFileData.Length * (98/100) - 320), maxSize);
+                uint decompressedDataSize = Huffman.Decompress(inputFileData, decompressedData, (uint)(inputFileData.Length - 4), (uint)originalSize);
                 using (var outputFile = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
                 {
                     outputFile.Write(decompressedData, 0, (int)decompressedDataSize);
